@@ -45,6 +45,10 @@
 			<HintPath>$(HKRefs)/UnityEngine.CoreModule.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
+		<Reference Include="UnityEngine.Physics2DModule">
+			<HintPath>$(HKRefs)/UnityEngine.Physics2DModule.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
 		<Reference Include="PlayMaker">
 			<HintPath>$(HKRefs)/PlayMaker.dll</HintPath>
 			<Private>false</Private>
@@ -55,10 +59,6 @@
 		</Reference>
 		<Reference Include="MMHOOK_Assembly-CSharp">
 			<HintPath>$(HKModdingApi)/MMHOOK_Assembly-CSharp.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-		<Reference Include="EnemyHPBar">
-			<HintPath>$(HKModRefs)/Enemy HP Bar/EnemyHPBar.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 	</ItemGroup>
