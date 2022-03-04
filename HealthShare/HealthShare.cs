@@ -27,8 +27,29 @@ public sealed partial class HealthShare : Mod, ITogglableMod {
 		}
 
 		Instance = this;
+
+		USceneManager.activeSceneChanged += EditScene;
 	}
 
-	public void Unload() =>
+	public void Unload() {
+		USceneManager.activeSceneChanged -= EditScene;
+
 		Instance = null;
+	}
+
+	internal static void EditScene(Scene _, Scene next) {
+		if (GameManager.instance.IsNonGameplayScene()) {
+			return;
+		}
+
+		if (!GlobalSettings.modifyBosses) {
+			return;
+		}
+
+		if (BossSequenceController.IsInSequence && !GlobalSettings.modifyPantheons) {
+			return;
+		}
+
+		SceneEdit.TryEdit(next.name);
+	}
 }
