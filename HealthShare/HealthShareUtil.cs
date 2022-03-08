@@ -12,11 +12,16 @@ public static class HealthShareUtil {
 	public static bool TryGetSharedHM(this HealthManager self, [NotNullWhen(true)] out SharedHealthManager? shm) =>
 		(shm = GetSharedHM(self)) != null;
 
+	public static bool IsSharing(this HealthManager self) => self.TryGetSharedHM(out _);
+
+
 	public static SharedHealthManager? GetBackedSharedHM(this HealthManager self) =>
 		new DynamicData(self).Get<SharedHealthManager>("backedSharedHM");
 
 	public static bool TryGetBackedSharedHM(this HealthManager self, [NotNullWhen(true)] out SharedHealthManager? shm) =>
 		(shm = GetBackedSharedHM(self)) != null;
+
+	public static bool IsBackingHM(this HealthManager self) => self.TryGetBackedSharedHM(out _);
 
 
 	public static void AddToShared(this HealthManager self, SharedHealthManager shm) =>

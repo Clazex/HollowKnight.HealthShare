@@ -41,16 +41,19 @@ public class SharedHealthManager : MonoBehaviour {
 	#endregion
 
 	private SharedHealthManager() {
+		gameObject.layer = (int) PhysLayers.ENEMIES;
+
 		BackingHM = gameObject.AddComponent<HealthManager>();
 		BackingHM.OnDeath += KillMembers;
 		new DynamicData(BackingHM).Set("backedSharedHM", this);
 		gameObject.MarkAsBoss();
 
 		// Tricks Debug Enemies Panel
-		gameObject.layer = (int) PhysLayers.ENEMIES;
-		gameObject.AddComponent<NonBouncer>();
-		gameObject.AddComponent<BoxCollider2D>().size =
-			new(short.MaxValue, short.MaxValue);
+		if (ModHooks.GetMod("DebugMod", true) != null) {
+			gameObject.AddComponent<NonBouncer>();
+			gameObject.AddComponent<BoxCollider2D>().size =
+				new(short.MaxValue, short.MaxValue);
+		}
 	}
 
 	public void OnDestroy() =>
@@ -142,10 +145,22 @@ public class SharedHealthManager : MonoBehaviour {
 	}
 
 	private static void ReportDamage(On.HealthManager.orig_TakeDamage orig, HealthManager self, HitInstance hit) {
-		orig(self, hit);
+		if (self.IsBackingHM()) {
+			if (hit is {
+				AttackType: AttackTypes.RuinsWater,
+				IgnoreInvulnerable: true
+			}) {
+				orig(self, hit);
+			}
+		} else {
+			orig(self, hit);
+		}
 
 		if (self.TryGetSharedHM(out SharedHealthManager? shm)) {
-			shm.BackingHM.ApplyExtraDamage(hit.DamageDealt);
+			shm.BackingHM.Hit(hit with {
+				AttackType = AttackTypes.RuinsWater,
+				IgnoreInvulnerable = true
+			});
 		}
 	}
 
