@@ -41,13 +41,16 @@ public static class HealthShareUtil {
 		.Where(hm => hm != null)
 		.AddToShared(shm);
 
-	public static void ShareHealth(this IEnumerable<HealthManager> self, int initialHP = 0, string name = "SharedHealthManager") =>
-		self.AddToShared(SharedHealthManager.Create(name, initialHP));
+	public static SharedHealthManager ShareHealth(this IEnumerable<HealthManager> self, int initialHP = 0, string name = "SharedHealthManager") =>
+		SharedHealthManager.Create(name, initialHP, self);
 
-	public static void ShareHealth(this IEnumerable<GameObject> self, int initialHP = 0, string name = "SharedHealthManager") =>
-		self.AddToShared(SharedHealthManager.Create(name, initialHP));
+	public static SharedHealthManager ShareHealth(this IEnumerable<GameObject> self, int initialHP = 0, string name = "SharedHealthManager") {
+		var shm = SharedHealthManager.Create(name, initialHP);
+		self.AddToShared(shm);
+		return shm;
+	}
 
-	public static void ShareWith(this HealthManager self, params HealthManager[] hms) =>
+	public static SharedHealthManager ShareWith(this HealthManager self, params HealthManager[] hms) =>
 		SharedHealthManager.Create(self.name + " Shared Health", hms.Prepend(self));
 
 	public static void StopSharing(this HealthManager self, int healthTaking) {

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<AssemblyTitle>HealthShare</AssemblyTitle>
-		<Version>0.1.1</Version>
+		<Version>0.1.2</Version>
 		<Description>A Hollow Knight mod to let some bosses use shared health and provide health sharing API</Description>
 		<Authors>Clazex</Authors>
 
