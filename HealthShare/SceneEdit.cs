@@ -6,7 +6,7 @@ internal sealed class SceneEdit : MonoBehaviour {
 	private static readonly SceneEdit instance;
 
 	static SceneEdit() {
-		var go = new GameObject("HealthShare Scene Edit Handler");
+		GameObject go = new("HealthShare Scene Edit Handler");
 		UObject.DontDestroyOnLoad(go);
 		instance = go.AddComponent<SceneEdit>();
 	}

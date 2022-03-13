@@ -41,6 +41,8 @@ public class SharedHealthManager : MonoBehaviour {
 	#endregion
 
 	private SharedHealthManager() {
+		InstanceCount++;
+
 		gameObject.layer = (int) PhysLayers.ENEMIES;
 
 		BackingHM = gameObject.AddComponent<HealthManager>();
@@ -55,6 +57,8 @@ public class SharedHealthManager : MonoBehaviour {
 				new(short.MaxValue, short.MaxValue);
 		}
 	}
+
+	~SharedHealthManager() => InstanceCount--;
 
 	public void OnDestroy() =>
 		Die();
@@ -91,6 +95,11 @@ public class SharedHealthManager : MonoBehaviour {
 	public void Add(params HealthManager[] hms) => Add(hms.AsEnumerable());
 
 	#endregion
+
+	public void Hit(HitInstance hit) => BackingHM.Hit(hit with {
+		AttackType = AttackTypes.RuinsWater,
+		IgnoreInvulnerable = true
+	});
 
 	public void Remove(HealthManager hm, int healthTaking) {
 		if (healthTaking < 0) {
@@ -137,11 +146,31 @@ public class SharedHealthManager : MonoBehaviour {
 		gameObject.RefreshHPBar();
 	}
 
-	#region Static Helpers
 
-	static SharedHealthManager() {
-		On.HealthManager.TakeDamage += ReportDamage;
-		On.HealthManager.ApplyExtraDamage += ReportExtraDamage;
+	#region Damage Proxy
+
+	private static readonly object lockObj = new();
+	private static int instanceCount = 0;
+
+	public static int InstanceCount {
+		get => instanceCount;
+		private set {
+			if (value < 0) {
+				throw new ArgumentOutOfRangeException(nameof(value));
+			}
+
+			lock (lockObj) {
+				if (value == 0) {
+					On.HealthManager.TakeDamage -= ReportDamage;
+					On.HealthManager.ApplyExtraDamage -= ReportExtraDamage;
+				} else if (instanceCount == 0 && value > 0) {
+					On.HealthManager.TakeDamage += ReportDamage;
+					On.HealthManager.ApplyExtraDamage += ReportExtraDamage;
+				}
+
+				instanceCount = value;
+			}
+		}
 	}
 
 	private static void ReportDamage(On.HealthManager.orig_TakeDamage orig, HealthManager self, HitInstance hit) {
