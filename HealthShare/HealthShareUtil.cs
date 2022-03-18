@@ -1,10 +1,8 @@
-using MonoMod.ModInterop;
 using MonoMod.Utils;
 
 namespace HealthShare;
 
 [PublicAPI]
-[ModExportName(nameof(HealthShare))]
 public static class HealthShareUtil {
 	public static SharedHealthManager? GetSharedHM(this HealthManager self) =>
 		new DynamicData(self).Get<SharedHealthManager>("sharedHM");

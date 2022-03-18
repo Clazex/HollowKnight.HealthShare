@@ -18,7 +18,7 @@ public sealed partial class HealthShare : Mod, ITogglableMod {
 	public override string GetVersion() => Version.Value;
 
 	public HealthShare() =>
-		typeof(HealthShareUtil).ModInterop();
+		typeof(HealthShareExport).ModInterop();
 
 	public override void Initialize() {
 		if (Instance != null) {
