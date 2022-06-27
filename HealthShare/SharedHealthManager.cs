@@ -52,7 +52,7 @@ public class SharedHealthManager : MonoBehaviour {
 
 		// Tricks Debug Enemies Panel
 		if (ModHooks.GetMod("DebugMod", true) != null) {
-			gameObject.AddComponent<NonBouncer>();
+			_ = gameObject.AddComponent<NonBouncer>();
 			gameObject.AddComponent<BoxCollider2D>().size =
 				new(short.MaxValue, short.MaxValue);
 		}
@@ -110,7 +110,7 @@ public class SharedHealthManager : MonoBehaviour {
 			throw new InvalidOperationException("Specified HM is not sharing in current Shared HM");
 		}
 
-		HMs.Remove(hm);
+		_ = HMs.Remove(hm);
 		hm.hp = healthTaking;
 		HP -= healthTaking;
 

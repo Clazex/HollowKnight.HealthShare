@@ -66,7 +66,7 @@ internal sealed class SceneEdit : MonoBehaviour {
 	}
 
 	private IEnumerator GG_Vengefly_V() {
-		new[] { "Giant Buzzer Col", "Giant Buzzer Col (1)" }
+		_ = new[] { "Giant Buzzer Col", "Giant Buzzer Col (1)" }
 			.Select(name => GameObject.Find(name))
 			.ShareHealth(name: "Vengefly Kings");
 
