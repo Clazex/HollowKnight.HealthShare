@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<AssemblyTitle>HealthShare</AssemblyTitle>
-		<Version>0.3.0</Version>
-		<Description>A Hollow Knight mod to let some bosses use shared health and provide health sharing API</Description>
+		<Version>1.0.0</Version>
+		<Description>A Hollow Knight mod to let some bosses use shared health</Description>
 		<Authors>Clazex</Authors>
 
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -67,6 +67,14 @@
 		</Reference>
 		<Reference Include="MMHOOK_Assembly-CSharp">
 			<HintPath>$(HKModdingApi)/MMHOOK_Assembly-CSharp.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="Satchel">
+			<HintPath>$(HKModRefs)/Satchel/Satchel.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="Osmi">
+			<HintPath>$(HKModRefs)/Osmi/Osmi.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 	</ItemGroup>

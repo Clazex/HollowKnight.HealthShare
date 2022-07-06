@@ -6,7 +6,6 @@ public sealed partial class HealthShare : IMenuMod {
 	bool IMenuMod.ToggleButtonInsideMenu => true;
 
 	List<MenuEntry> IMenuMod.GetMenuData(MenuEntry? toggleButtonEntry) => new() {
-		toggleButtonEntry!.Value,
 		new(
 			"Modify Bosses",
 			ModMenu.StateStrings,

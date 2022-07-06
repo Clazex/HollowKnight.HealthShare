@@ -1,24 +1,17 @@
-using MonoMod.ModInterop;
-
 namespace HealthShare;
 
-public sealed partial class HealthShare : Mod, ITogglableMod {
+public sealed partial class HealthShare : Mod {
 	public static HealthShare? Instance { get; private set; }
 	public static HealthShare UnsafeInstance => Instance!;
 
-	internal static readonly Lazy<string> Version = new(() => Assembly
-		.GetExecutingAssembly()
-		.GetCustomAttribute<AssemblyInformationalVersionAttribute>()
-		.InformationalVersion
+	internal static readonly Lazy<string> Version = AssemblyUtil
 #if DEBUG
-		+ "-dev"
+		.GetMyDefaultVersionWithHash();
+#else
+		.GetMyDefaultVersion();
 #endif
-	);
 
 	public override string GetVersion() => Version.Value;
-
-	public HealthShare() =>
-		typeof(HealthShareExport).ModInterop();
 
 	public override void Initialize() {
 		if (Instance != null) {
@@ -28,28 +21,6 @@ public sealed partial class HealthShare : Mod, ITogglableMod {
 
 		Instance = this;
 
-		USceneManager.activeSceneChanged += EditScene;
-	}
-
-	public void Unload() {
-		USceneManager.activeSceneChanged -= EditScene;
-
-		Instance = null;
-	}
-
-	internal static void EditScene(Scene _, Scene next) {
-		if (GameManager.instance.IsNonGameplayScene()) {
-			return;
-		}
-
-		if (!GlobalSettings.modifyBosses) {
-			return;
-		}
-
-		if (BossSequenceController.IsInSequence && !GlobalSettings.modifyPantheons) {
-			return;
-		}
-
-		SceneEdit.TryEdit(next.name);
+		OsmiHooks.SceneChangeHook += SceneEdit.EditScene;
 	}
 }
